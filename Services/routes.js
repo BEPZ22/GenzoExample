@@ -7,7 +7,7 @@ module.exports = {
 
         app.get('/', hello.getHelloWorld);
 
-        app.get('/db/User/:firstName/:lastName', user.addUserData);
+        app.post('/db/User', user.addUserData);
 
         app.get('/db/User', user.getUserData);
         
