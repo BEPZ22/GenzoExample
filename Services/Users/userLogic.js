@@ -3,10 +3,9 @@ const db = require('../../Database/mySqlDB');
 module.exports = {
     
     addUserData : async function (req,res){
-        const name = req.body['firstName'];
-        const lastName = req.body['lastName'];
+        const { firstName, lastName } = req.body
         try {
-            const user = await db.User.create({ firstName: name , lastName: lastName });
+            const user = await db.User.create({ firstName: firstName , lastName: lastName });
             console.log(user)
             res.status(200).send('Usuario creado de manera exitosa');
         } catch (error) {
