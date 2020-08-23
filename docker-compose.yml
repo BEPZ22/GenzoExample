@@ -1,19 +1,38 @@
 version: '3'
 services:
+  front:
+    container_name:  front
+    restart: always
+    build: ./Front
+    ports:
+      - '4200:80'
+    depends_on: 
+      - server
+    environment:
+      - PORT=4200
+  server:
+    container_name: server
+    restart: always
+    build: ./Back
+    ports:
+      - '8080:8080'
+    depends_on: 
+      - db
+      - mongo
+    command: ["./wait-for-it.sh", "db:3306", "--", "node", "server.js"]
+    environment:
+      - PORT=8080
+      - WAIT_HOSTS= db:3306, mongo:27017
+          
   db:
     container_name:  db
     image: mysql
     environment:
       - MYSQL_DATABASE=DockerBraulio
       - MYSQL_ROOT_PASSWORD=1234
-  app:
-    container_name:  server
-    restart: always
-    build: .
+  mongo:
+    container_name:  mongo
+    image: mongo
     ports:
-      - '8080:8080'
-    depends_on: 
-      -  db
-    command: ["./wait-for-it.sh", "db:3306", "--", "node", "server.js"]
-    environment:
-      - PORT=8080
+    - '27017:27017'
+    restart: always
